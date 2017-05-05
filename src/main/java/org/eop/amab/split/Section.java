@@ -11,6 +11,10 @@ public class Section {
 	private String source;
 	private Location location;
 	
+	public Section() {
+		
+	}
+	
 	public Section(String source, Location location) {
 		this.source = source;
 		this.location = location;
@@ -19,8 +23,14 @@ public class Section {
 	public String getSource() {
 		return source;
 	}
+	public void setSource(String source) {
+		this.source = source;
+	}
 	public Location getLocation() {
 		return location;
+	}
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 	
 	@Override
