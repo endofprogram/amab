@@ -21,10 +21,6 @@ public interface CharReader {
 	
 	char[] look(int count);
 	
-	char[] readAlways(CharsMatcher charsMatcher);
-	
-	char[] readUntil(CharsMatcher charsMatcher);
-	
 	char[] read(int begin, int end);
 	
 	char[] read(Position begin, Position end);

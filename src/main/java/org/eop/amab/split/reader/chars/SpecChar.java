@@ -23,8 +23,6 @@ public enum SpecChar {
 	Obrace('{'),
 	Cbrace('}'),
 	
-	Exclam('!'),
-	
 	None((char)-1);
 	
 	private char _char;
@@ -55,7 +53,6 @@ public enum SpecChar {
 			case '"' : return Dquote;
 			case '{' : return Obrace;
 			case '}' : return Cbrace;
-			case '!' : return Exclam;
 			default : return None;
 		}
 	}
