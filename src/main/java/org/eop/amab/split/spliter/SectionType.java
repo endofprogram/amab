@@ -13,9 +13,13 @@ public enum SectionType {
 	Output,
 	Statement,
 	
+	End,
 	Unsure;
 	
 	public static SectionType tryOf(char c) {
+		if (c == '\0') {
+			return End;
+		}
 		if (c == ' ' || c == '\t') {
 			return Blank;
 		}
@@ -29,6 +33,9 @@ public enum SectionType {
 	}
 	
 	public static SectionType tryOf(char[] cs) {
+		if (cs.length < 2) {
+			return Constant;
+		}
 		if (cs[0] == '#' && cs[1] == '{') {
 			return Statement;
 		}

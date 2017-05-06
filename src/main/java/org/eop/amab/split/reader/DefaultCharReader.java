@@ -28,8 +28,11 @@ public class DefaultCharReader implements CharReader {
 		if (index < length) {
 			char c = source.charAt(index);
 			index++;
+			column++;
 			return c;
 		}
+		index++;
+		column++;
 		return '\0';
 	}
 
@@ -44,6 +47,7 @@ public class DefaultCharReader implements CharReader {
 			for (int i = 0; i < ncount; i++) {
 				cs[i] = source.charAt(index);
 				index++;
+				column++;
 			}
 			return cs;
 		}
@@ -54,6 +58,7 @@ public class DefaultCharReader implements CharReader {
 	public int unread() {
 		if (index >= 1) {
 			index--;
+			column--;
 			return 1;
 		}
 		return 0;
@@ -63,10 +68,12 @@ public class DefaultCharReader implements CharReader {
 	public int unread(int count) {
 		if (index >= count) {
 			index -= count;
+			column -= count;
 			return count;
 		}
 		int ncount = index;
 		index = 0;
+		column = 0;
 		return ncount;
 	}
 
@@ -93,17 +100,37 @@ public class DefaultCharReader implements CharReader {
 		}
 		return new char[0];
 	}
-
+	
 	@Override
-	public char[] read(int begin, int end) {
-		return null;
+	public int skip() {
+		if (index < length) {
+			index++;
+			column++;
+			return 1;
+		}
+		return 0;
+	}
+	
+	@Override
+	public int skip(int count) {
+		if (index < length) {
+			int ncount = length - index;
+			if (ncount > count) {
+				ncount = count;
+			}
+			index += ncount;
+			column += ncount;
+			return ncount;
+		}
+		return 0;
 	}
 
 	@Override
-	public char[] read(Position begin, Position end) {
-		return null;
+	public void increaseLine() {
+		line++;
+		column = 0;
 	}
-
+	
 	@Override
 	public Position getPosition() {
 		return new Position(line + 1, column + 1);

@@ -8,19 +8,9 @@ import org.eop.amab.Location;
  */
 public class Comment extends Section {
 
-	private CommentType commentType;
-	
-	public Comment(String source, CommentType commentType, Location location) {
+	public Comment(String source, Location location) {
 		super(source, location);
-		this.commentType = commentType;
 	}
 
-	public CommentType getCommentType() {
-		return commentType;
-	}
 
-	public enum CommentType {
-		SingleLine,
-		MultiLine
-	}
 }

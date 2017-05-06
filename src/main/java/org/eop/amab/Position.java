@@ -9,6 +9,10 @@ public class Position {
 	private int line;
 	private int column;
 	
+	public Position() {
+		this(0, 0);
+	}
+	
 	public Position(int line, int column) {
 		super();
 		this.line = line;
@@ -20,6 +24,11 @@ public class Position {
 	}
 	public int getColumn() {
 		return column;
+	}
+
+	@Override
+	public String toString() {
+		return "(" + line + "," + column + ")";
 	}
 	
 }

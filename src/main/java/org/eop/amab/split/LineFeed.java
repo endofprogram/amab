@@ -8,8 +8,8 @@ import org.eop.amab.Location;
  */
 public class LineFeed extends Section {
 
-	public LineFeed(Location location) {
-		super(System.getProperty("line.separator"), location);
+	public LineFeed(String source, Location location) {
+		super(source, location);
 	}
 
 }

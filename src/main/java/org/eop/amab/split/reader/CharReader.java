@@ -1,7 +1,6 @@
 package org.eop.amab.split.reader;
 
 import org.eop.amab.Position;
-import org.eop.amab.split.reader.chars.CharsMatcher;
 
 /**
  * @author lixinjie
@@ -21,9 +20,11 @@ public interface CharReader {
 	
 	char[] look(int count);
 	
-	char[] read(int begin, int end);
+	int skip();
 	
-	char[] read(Position begin, Position end);
+	int skip(int count);
+	
+	void increaseLine();
 	
 	Position getPosition();
 }

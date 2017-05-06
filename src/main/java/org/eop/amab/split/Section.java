@@ -35,7 +35,7 @@ public class Section {
 	
 	@Override
 	public String toString() {
-		return "Section [source=" + source + ", location=" + location + "]";
+		return this.getClass().getSimpleName() + "=" + source + ", location=" + location;
 	}
 	
 }

@@ -8,7 +8,10 @@ public enum SpecChar {
 	
 	Bspace(' '),
 	Tab('\t'),
-	End('\0'),
+	
+	CReturn('\r'),
+	LFeed('\n'),
+	
 	
 	Fslash('/'),
 	Bslash('\\'),
@@ -22,6 +25,8 @@ public enum SpecChar {
 	
 	Obrace('{'),
 	Cbrace('}'),
+	
+	End('\0'),
 	
 	None((char)-1);
 	
@@ -43,16 +48,25 @@ public enum SpecChar {
 		switch (_char) {
 			case ' ' : return Bspace;
 			case '\t' : return Tab;
-			case '\0' : return End;
+			
+			case '\r' : return CReturn;
+			case '\n' : return LFeed;
+			
 			case '/' : return Fslash;
 			case '\\' : return Bslash;
+			
 			case '#' : return Hash;
 			case '$' : return Dollar;
 			case '*' : return Asterisk;
+			
 			case '\'' : return Squote;
 			case '"' : return Dquote;
+			
 			case '{' : return Obrace;
 			case '}' : return Cbrace;
+			
+			case '\0' : return End;
+			
 			default : return None;
 		}
 	}

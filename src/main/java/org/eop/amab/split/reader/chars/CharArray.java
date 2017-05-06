@@ -13,7 +13,7 @@ public class CharArray {
 	private int length;
 	
 	public CharArray() {
-		this(256);
+		this(128);
 	}
 	
 	public CharArray(int length) {
@@ -23,7 +23,7 @@ public class CharArray {
 	}
 	
 	public void add(char c) {
-		ensureLength(length + 1);
+		ensureLength(index + 1);
 		value[index] = c;
 		index++;
 	}
@@ -38,6 +38,11 @@ public class CharArray {
 	
 	public char[] toArray() {
 		return Arrays.copyOf(value, index);
+	}
+	
+	@Override
+	public String toString() {
+		return new String(value, 0, index);
 	}
 	
 	protected void ensureLength(int len) {
