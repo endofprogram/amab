@@ -1,4 +1,4 @@
-package org.eop.amab.compile.statement;
+package org.eop.amab.compile.statement.blank;
 
 /**
  * @author lixinjie
