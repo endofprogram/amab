@@ -8,9 +8,9 @@ public enum SectionType {
 
 	Blank,
 	LineFeed,
-	Comment,
+	Remark,
 	PlainText,
-	Output,
+	PlaceHolder,
 	Directive,
 	
 	End,
@@ -40,10 +40,10 @@ public enum SectionType {
 			return Directive;
 		}
 		if (cs[0] == '$' && cs[1] == '{') {
-			return Output;
+			return PlaceHolder;
 		}
 		if (cs[0] == '#' && (cs[1] == '#' || cs[1] == '*')) {
-			return Comment;
+			return Remark;
 		}
 		return PlainText;
 	}
