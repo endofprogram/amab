@@ -9,9 +9,9 @@ public enum SectionType {
 	Blank,
 	LineFeed,
 	Comment,
-	Constant,
+	PlainText,
 	Output,
-	Statement,
+	Directive,
 	
 	End,
 	Unsure;
@@ -27,17 +27,17 @@ public enum SectionType {
 			return LineFeed;
 		}
 		if ((c != '#' && c != '$') || c == '\\') {
-			return Constant;
+			return PlainText;
 		}
 		return Unsure;
 	}
 	
 	public static SectionType tryOf(char[] cs) {
 		if (cs.length < 2) {
-			return Constant;
+			return PlainText;
 		}
 		if (cs[0] == '#' && cs[1] == '{') {
-			return Statement;
+			return Directive;
 		}
 		if (cs[0] == '$' && cs[1] == '{') {
 			return Output;
@@ -45,6 +45,6 @@ public enum SectionType {
 		if (cs[0] == '#' && (cs[1] == '#' || cs[1] == '*')) {
 			return Comment;
 		}
-		return Constant;
+		return PlainText;
 	}
 }

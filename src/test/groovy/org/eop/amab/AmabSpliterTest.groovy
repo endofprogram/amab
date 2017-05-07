@@ -11,7 +11,10 @@ class AmabSpliterTest extends AbstractCommonTest {
 
 	@Test
 	void test1() {
-		AmabSpliter.split(new SourceCode(getSource()))
+		SplitedCode splitedCode = AmabSpliter.split(new SourceCode(getSource()))
+		splitedCode.getSections().each{
+			println it
+		}
 	}
 	
 	String getSource() {

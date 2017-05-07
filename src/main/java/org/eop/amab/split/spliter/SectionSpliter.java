@@ -4,11 +4,11 @@ import org.eop.amab.Location;
 import org.eop.amab.Position;
 import org.eop.amab.split.Blank;
 import org.eop.amab.split.Comment;
-import org.eop.amab.split.Constant;
+import org.eop.amab.split.Directive;
 import org.eop.amab.split.LineFeed;
 import org.eop.amab.split.Output;
+import org.eop.amab.split.PlainText;
 import org.eop.amab.split.Section;
-import org.eop.amab.split.Statement;
 import org.eop.amab.split.exception.SplitException;
 import org.eop.amab.split.reader.CharReader;
 import org.eop.amab.split.reader.chars.CharArray;
@@ -24,9 +24,9 @@ public class SectionSpliter {
 	public static Section splitSection(CharReader charReader) {
 		switch (getSectionType(charReader)) {
 			case Blank : return splitBlank(charReader);
-			case Statement : return splitStatement(charReader);
+			case Directive : return splitDirective(charReader);
 			case Output : return splitOutput(charReader);
-			case Constant : return splitConstant(charReader);
+			case PlainText : return splitPlainText(charReader);
 			case Comment : return splitComment(charReader);
 			case LineFeed : return splitLineFeed(charReader);
 			default : return null;
@@ -54,7 +54,7 @@ public class SectionSpliter {
 		return new Blank(new String(chars), new Location(begin, end));
 	}
 	
-	protected static Statement splitStatement(CharReader charReader) {
+	protected static Directive splitDirective(CharReader charReader) {
 		Position begin = charReader.getPosition();
 		CharArray ca = new CharArray();
 		char[] chars = charReader.read(2);
@@ -86,7 +86,7 @@ public class SectionSpliter {
 			}
 		}
 		Position end = charReader.getPosition();
-		return new Statement(ca.toString(), new Location(begin, end));
+		return new Directive(ca.toString(), new Location(begin, end));
 	}
 	
 	protected static Output splitOutput(CharReader charReader) {
@@ -124,7 +124,7 @@ public class SectionSpliter {
 		return new Output(ca.toString(), new Location(begin, end));
 	}
 	
-	protected static Constant splitConstant(CharReader charReader) {
+	protected static PlainText splitPlainText(CharReader charReader) {
 		Position begin = charReader.getPosition();
 		CharArray ca = new CharArray();
 		CharsMatcher crlfMatcher = CharsMatcher.fromSpecChar(SpecChar.CReturn, SpecChar.LFeed);
@@ -141,14 +141,14 @@ public class SectionSpliter {
 			if (charsMatcher.getMatchedSpecChar() == SpecChar.Bslash) {
 				charReader.skip();
 				ca.add(charReader.read());
-			} else if (SectionType.tryOf(charReader.look(2)) == SectionType.Constant) {
+			} else if (SectionType.tryOf(charReader.look(2)) == SectionType.PlainText) {
 				ca.add(charReader.read(2));
 			} else {
 				break;
 			}
 		}
 		Position end = charReader.getPosition();
-		return new Constant(ca.toString(), new Location(begin, end));
+		return new PlainText(ca.toString(), new Location(begin, end));
 	}
 	
 	protected static Comment splitComment(CharReader charReader) {
