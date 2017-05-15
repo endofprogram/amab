@@ -1,9 +1,16 @@
 package org.eop.amab.compile.statement.blank;
 
+import org.eop.amab.compile.statement.PositionBlank;
+import org.eop.amab.split.Section;
+
 /**
  * @author lixinjie
  * @since 2017-05-07
  */
-public class OmitBlank {
+public class OmitBlank extends PositionBlank {
+
+	public OmitBlank(Section section) {
+		super(section);
+	}
 
 }

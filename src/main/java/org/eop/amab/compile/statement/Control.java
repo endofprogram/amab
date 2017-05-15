@@ -5,11 +5,11 @@ import org.eop.amab.split.Section;
 
 /**
  * @author lixinjie
- * @since 2017-05-07
+ * @since 2017-05-16
  */
-public class NewLine extends Statement {
+public class Control extends Statement {
 
-	public NewLine(Section section) {
+	public Control(Section section) {
 		super(section);
 	}
 

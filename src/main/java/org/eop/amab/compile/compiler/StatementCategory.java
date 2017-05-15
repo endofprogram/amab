@@ -24,11 +24,14 @@ public enum StatementCategory {
 	
 	Output,
 	
-	Statement,
+	Locution,
 	
 	None;
 	
 	public static StatementCategory tryOf(Section section) {
+		if (section == null) {
+			return None;
+		}
 		if (section instanceof Blank) {
 			return PositionBlank;
 		}
@@ -45,7 +48,7 @@ public enum StatementCategory {
 			return Output;
 		}
 		if (section instanceof Directive) {
-			return Statement;
+			return Locution;
 		}
 		return None;
 	}
