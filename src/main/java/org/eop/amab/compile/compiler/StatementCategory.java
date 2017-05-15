@@ -12,7 +12,7 @@ import org.eop.amab.split.Section;
  * @author lixinjie
  * @since 2017-05-07
  */
-public enum StatementClass {
+public enum StatementCategory {
 
 	PositionBlank,
 	
@@ -28,7 +28,7 @@ public enum StatementClass {
 	
 	None;
 	
-	public static StatementClass tryOf(Section section) {
+	public static StatementCategory tryOf(Section section) {
 		if (section instanceof Blank) {
 			return PositionBlank;
 		}
