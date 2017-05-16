@@ -37,6 +37,9 @@ public enum StatementType {
 	None;
 	
 	public static StatementType tryOf(Statement statement) {
+		if (statement == null) {
+			return None;
+		}
 		if (statement instanceof Locution) {
 			if (statement.getSection().getSource().contains("import")) {
 				return Import;

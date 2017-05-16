@@ -1,11 +1,17 @@
 package org.eop.amab.compile.compiler;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
+
 import org.eop.amab.compile.Statement;
 import org.eop.amab.compile.reader.SectionReader;
 import org.eop.amab.compile.reader.StatementReader;
 import org.eop.amab.compile.statement.Assign;
 import org.eop.amab.compile.statement.Comment;
 import org.eop.amab.compile.statement.Constant;
+import org.eop.amab.compile.statement.Control;
 import org.eop.amab.compile.statement.Import;
 import org.eop.amab.compile.statement.Locution;
 import org.eop.amab.compile.statement.NewLine;
@@ -17,6 +23,8 @@ import org.eop.amab.compile.statement.blank.OmitBlank;
 import org.eop.amab.compile.statement.blank.RetainBlank;
 import org.eop.amab.compile.statement.blank.TailBlank;
 import org.eop.amab.compile.statement.control.Do;
+import org.eop.amab.compile.statement.control.Elif;
+import org.eop.amab.compile.statement.control.Else;
 import org.eop.amab.compile.statement.control.For;
 import org.eop.amab.compile.statement.control.Foreach;
 import org.eop.amab.compile.statement.control.If;
@@ -51,6 +59,19 @@ public class StatementCompiler {
 		return StatementType.tryOf(statementReader.look());
 	}
 	
+	protected static Control compileControlStatement(StatementReader statementReader) {
+		switch (getStatementType(statementReader)) {
+			case If : return compileIf(statementReader);
+			case Elif : return compileElif(statementReader);
+			case Else : return compileElse(statementReader);
+			case Foreach : return compileForeach(statementReader);
+			case For : return compileFor(statementReader);
+			case While : return compileWhile(statementReader);
+			case Do : return compileDo(statementReader);
+			default : return null;
+		}
+	}
+	
 	protected static Import compileImport(StatementReader statementReader) {
 		Import _import = new Import(statementReader.read().getSection());
 		
@@ -59,31 +80,66 @@ public class StatementCompiler {
 	
 	protected static If compileIf(StatementReader statementReader) {
 		If _if = new If(statementReader.read().getSection());
-		
+		while (StatementType.tryOf(statementReader.look()) != StatementType.End) {
+			addToControl(_if, compileChildStatements(statementReader));
+			addToIf(_if, compileControlStatement(statementReader));
+		}
+		addEndToControl(_if, statementReader.read());
 		return _if;
+	}
+	
+	protected static Elif compileElif(StatementReader statementReader) {
+		Elif _elif = new Elif(statementReader.read().getSection());
+		while (StatementType.tryOf(statementReader.look()) != StatementType.Elif ||
+				StatementType.tryOf(statementReader.look()) != StatementType.Else) {
+			addToControl(_elif, compileChildStatements(statementReader));
+			addToControl(_elif, compileControlStatement(statementReader));
+		}
+		return _elif;
+	}
+	
+	protected static Else compileElse(StatementReader statementReader) {
+		Else _else = new Else(statementReader.read().getSection());
+		while (StatementType.tryOf(statementReader.look()) != StatementType.End) {
+			addToControl(_else, compileChildStatements(statementReader));
+			addToControl(_else, compileControlStatement(statementReader));
+		}
+		return _else;
 	}
 	
 	protected static Foreach compileForeach(StatementReader statementReader) {
 		Foreach _foreach = new Foreach(statementReader.read().getSection());
-		
+		while (StatementType.tryOf(statementReader.look()) != StatementType.End) {
+			addToControl(_foreach, compileChildStatements(statementReader));
+			addToControl(_foreach, compileControlStatement(statementReader));
+		}
 		return _foreach;
 	}
 	
 	protected static For compileFor(StatementReader statementReader) {
 		For _for = new For(statementReader.read().getSection());
-		
+		while (StatementType.tryOf(statementReader.look()) != StatementType.End) {
+			addToControl(_for, compileChildStatements(statementReader));
+			addToControl(_for, compileControlStatement(statementReader));
+		}
 		return _for;
 	}
 	
 	protected static While compileWhile(StatementReader statementReader) {
 		While _while = new While(statementReader.read().getSection());
-		
+		while (StatementType.tryOf(statementReader.look()) != StatementType.End) {
+			addToControl(_while, compileChildStatements(statementReader));
+			addToControl(_while, compileControlStatement(statementReader));
+		}
 		return _while;
 	}
 	
 	protected static Do compileDo(StatementReader statementReader) {
 		Do _do = new Do(statementReader.read().getSection());
-		
+		while (StatementType.tryOf(statementReader.look()) != StatementType.While) {
+			addToControl(_do, compileChildStatements(statementReader));
+			addToControl(_do, compileControlStatement(statementReader));
+		}
 		return _do;
 	}
 	
@@ -105,6 +161,44 @@ public class StatementCompiler {
 	protected static Statement compileOther(StatementReader statementReader) {
 		Statement _other = statementReader.read();
 		return _other;
+	}
+	
+	protected static Statement[] compileChildStatements(StatementReader statementReader) {
+		List<Statement> statements = new ArrayList<>();
+		Set<StatementType> statementTypes = EnumSet.of(StatementType.Other, StatementType.ProtocolOutput, StatementType.ContextOutput, StatementType.Assign);
+		Statement statement;
+		while (statementTypes.contains(StatementType.tryOf(statement = statementReader.read()))) {
+			statements.add(statement);
+		}
+		statementReader.unread();
+		Statement[] sa = new Statement[statements.size()];
+		return statements.toArray(sa);
+	}
+	
+	protected static void addToIf(If _if, Control control) {
+		if (control != null) {
+			if (control instanceof Elif) {
+				
+			} else if (control instanceof Else) {
+				
+			}
+		}
+	}
+	
+	protected static void addToControl(Control control, Statement[] statements) {
+		if (statements != null && statements.length > 0) {
+			for (Statement statement : statements) {
+				addToControl(control, statement);
+			}
+		}
+	}
+	
+	protected static void addToControl(Control control, Statement statement) {
+		
+	}
+	
+	protected static void addEndToControl(Control control, Statement end) {
+		
 	}
 	
 	public static Statement compileSingleStatement(SectionReader sectionReader) {
