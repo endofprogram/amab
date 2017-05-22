@@ -8,7 +8,7 @@ import java.util.Set;
 import org.eop.amab.compile.Statement;
 import org.eop.amab.compile.reader.SectionReader;
 import org.eop.amab.compile.reader.StatementReader;
-import org.eop.amab.compile.statement.Assign;
+import org.eop.amab.compile.statement.Assignment;
 import org.eop.amab.compile.statement.Comment;
 import org.eop.amab.compile.statement.Constant;
 import org.eop.amab.compile.statement.Control;
@@ -17,6 +17,7 @@ import org.eop.amab.compile.statement.Locution;
 import org.eop.amab.compile.statement.NewLine;
 import org.eop.amab.compile.statement.Output;
 import org.eop.amab.compile.statement.PositionBlank;
+import org.eop.amab.compile.statement.Sideffect;
 import org.eop.amab.compile.statement.blank.HeadBlank;
 import org.eop.amab.compile.statement.blank.MidBlank;
 import org.eop.amab.compile.statement.blank.OmitBlank;
@@ -47,7 +48,8 @@ public class StatementCompiler {
 			case For : return compileFor(statementReader);
 			case While : return compileWhile(statementReader);
 			case Do : return compileDo(statementReader);
-			case Assign : return compileAssign(statementReader);
+			case Assignment : return compileAssignment(statementReader);
+			case Sideffect : return compileSideffect(statementReader);
 			case ProtocolOutput : return compileProtocolOutput(statementReader);
 			case ContextOutput : return compileContextOutput(statementReader);
 			case Other : return compileOther(statementReader);
@@ -143,9 +145,14 @@ public class StatementCompiler {
 		return _do;
 	}
 	
-	protected static Assign compileAssign(StatementReader statementReader) {
-		Assign _assign = new Assign(statementReader.read().getSection());
-		return _assign;
+	protected static Assignment compileAssignment(StatementReader statementReader) {
+		Assignment _assignment = new Assignment(statementReader.read().getSection());
+		return _assignment;
+	}
+	
+	protected static Sideffect compileSideffect(StatementReader statementReader) {
+		Sideffect _sideffect = new Sideffect(statementReader.read().getSection());
+		return _sideffect;
 	}
 	
 	protected static ProtocolOutput compileProtocolOutput(StatementReader statementReader) {
@@ -165,7 +172,7 @@ public class StatementCompiler {
 	
 	protected static Statement[] compileChildStatements(StatementReader statementReader) {
 		List<Statement> statements = new ArrayList<>();
-		Set<StatementType> statementTypes = EnumSet.of(StatementType.Other, StatementType.ProtocolOutput, StatementType.ContextOutput, StatementType.Assign);
+		Set<StatementType> statementTypes = EnumSet.of(StatementType.Other, StatementType.ProtocolOutput, StatementType.ContextOutput, StatementType.Assignment, StatementType.Sideffect);
 		Statement statement;
 		while (statementTypes.contains(StatementType.tryOf(statement = statementReader.read()))) {
 			statements.add(statement);

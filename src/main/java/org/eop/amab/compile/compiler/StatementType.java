@@ -26,7 +26,9 @@ public enum StatementType {
 	
 	End,
 	
-	Assign,
+	Assignment,
+	
+	Sideffect,
 	
 	ProtocolOutput,
 	
@@ -69,9 +71,9 @@ public enum StatementType {
 				return End;
 			}
 			if (statement.getSection().getSource().contains("=")) {
-				return Assign;
+				return Assignment;
 			}
-			return None;
+			return Sideffect;
 		}
 		if (statement instanceof Output) {
 			if (statement.getSection().getSource().contains("://")) {
