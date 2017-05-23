@@ -21,5 +21,8 @@ public class ExpressionNode {
 		Object d = 100000000;
 		System.out.println(c.getClass());
 		System.out.println(c == d);
+		Character e = 'a';
+		Character f = 'a';
+		System.out.println(e == f);
 	}
 }
