@@ -1,7 +1,7 @@
 package org.eop.amab.compile.compiler;
 
 import org.eop.amab.compile.Statement;
-import org.eop.amab.compile.statement.Locution;
+import org.eop.amab.compile.statement.Control;
 import org.eop.amab.compile.statement.Output;
 
 /**
@@ -10,31 +10,20 @@ import org.eop.amab.compile.statement.Output;
  */
 public enum StatementType {
 
-	Import,
-	
 	If,
 	Elif,
 	Else,
 	
 	Foreach,
 	
-	For,
-	
-	While,
-	
-	Do,
-	
 	End,
 	
-	Assignment,
-	
-	Sideffect,
-	
-	ProtocolOutput,
-	
-	ContextOutput,
-	
+	DirectOutput,
+	ClawOutput,
+
 	Other,
+	
+	Unknown,
 	
 	None;
 	
@@ -42,10 +31,7 @@ public enum StatementType {
 		if (statement == null) {
 			return None;
 		}
-		if (statement instanceof Locution) {
-			if (statement.getSection().getSource().contains("import")) {
-				return Import;
-			}
+		if (statement instanceof Control) {
 			if (statement.getSection().getSource().contains("elif")) {
 				return Elif;
 			}
@@ -58,28 +44,16 @@ public enum StatementType {
 			if (statement.getSection().getSource().contains("foreach")) {
 				return Foreach;
 			}
-			if (statement.getSection().getSource().contains("for")) {
-				return For;
-			}
-			if (statement.getSection().getSource().contains("while")) {
-				return While;
-			}
-			if (statement.getSection().getSource().contains("do")) {
-				return Do;
-			}
 			if (statement.getSection().getSource().contains("end")) {
 				return End;
 			}
-			if (statement.getSection().getSource().contains("=")) {
-				return Assignment;
-			}
-			return Sideffect;
+			return Unknown;
 		}
 		if (statement instanceof Output) {
-			if (statement.getSection().getSource().contains("://")) {
-				return ProtocolOutput;
+			if (statement.getSection().getSource().contains(":")) {
+				return ClawOutput;
 			}
-			return ContextOutput;
+			return DirectOutput;
 		}
 		return Other;
 	}

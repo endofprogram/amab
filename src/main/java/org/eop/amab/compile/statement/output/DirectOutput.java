@@ -7,9 +7,9 @@ import org.eop.amab.split.Section;
  * @author lixinjie
  * @since 2017-05-16
  */
-public class ContextOutput extends Output {
+public class DirectOutput extends Output {
 
-	public ContextOutput(Section section) {
+	public DirectOutput(Section section) {
 		super(section);
 	}
 

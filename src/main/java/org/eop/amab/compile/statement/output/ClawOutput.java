@@ -7,9 +7,9 @@ import org.eop.amab.split.Section;
  * @author lixinjie
  * @since 2017-05-16
  */
-public class ProtocolOutput extends Output {
+public class ClawOutput extends Output {
 
-	public ProtocolOutput(Section section) {
+	public ClawOutput(Section section) {
 		super(section);
 	}
 

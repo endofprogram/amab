@@ -24,7 +24,7 @@ public enum StatementCategory {
 	
 	Output,
 	
-	Locution,
+	Control,
 	
 	None;
 	
@@ -48,7 +48,7 @@ public enum StatementCategory {
 			return Output;
 		}
 		if (section instanceof Directive) {
-			return Locution;
+			return Control;
 		}
 		return None;
 	}
