@@ -31,7 +31,7 @@ public class CharsMatcher {
 		charSet.add(_char);
 	}
 	
-	public static CharsMatcher fromSpecChar(char... chars) {
+	public static CharsMatcher fromChar(char... chars) {
 		return new CharsMatcher(chars);
 	}
 }
