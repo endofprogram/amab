@@ -1,5 +1,8 @@
 package org.eop.amab.compile.statement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eop.amab.compile.Statement;
 import org.eop.amab.split.Section;
 
@@ -9,8 +12,17 @@ import org.eop.amab.split.Section;
  */
 public class Control extends Statement {
 
+	private List<Statement> children = new ArrayList<>();
+	
 	public Control(Section section) {
 		super(section);
 	}
 
+	public void addChild(Statement statement) {
+		children.add(statement);
+	}
+	
+	public List<Statement> getChildren() {
+		return children;
+	}
 }

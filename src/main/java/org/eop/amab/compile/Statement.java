@@ -1,5 +1,8 @@
 package org.eop.amab.compile;
 
+import org.eop.amab.AmabContext;
+import org.eop.amab.AmabResult;
+import org.eop.amab.AmabSetting;
 import org.eop.amab.split.Section;
 
 /**
@@ -14,11 +17,11 @@ public class Statement {
 		this.section = section;
 	}
 	
-	public void compile() {
+	public void compile(AmabSetting setting, AmabContext context) {
 		
 	}
 	
-	public void execute() {
+	public void execute(AmabSetting setting, AmabContext context, AmabResult result) {
 		
 	}
 
