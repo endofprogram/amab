@@ -9,6 +9,8 @@ import java.util.Map;
 import org.eop.amab.AmabContext;
 import org.eop.amab.AmabResult;
 import org.eop.amab.AmabSetting;
+import org.eop.amab.compile.AmabContextHolder;
+import org.eop.amab.compile.Name;
 import org.eop.amab.compile.Statement;
 import org.eop.amab.compile.statement.Control;
 import org.eop.amab.context.Fetcher;
@@ -21,22 +23,42 @@ import org.eop.amab.split.Section;
  */
 public class Foreach extends Control {
 
-	private String name;
+	private String iterName;
 	private Fetcher fetcher;
+	private AmabContextHolder contextHolder;
 	
 	public Foreach(Section section) {
 		super(section);
+		contextHolder = new AmabContextHolder();
 	}
 
 	@Override
+	public void compile(AmabSetting setting) {
+		int begin = getSection().getSource().indexOf("(") + 1;
+		int end = getSection().getSource().lastIndexOf(")");
+		String _foreach = getSection().getSource().substring(begin, end).trim();
+		String _in = " in ";
+		begin = _foreach.indexOf(_in);
+		iterName = _foreach.substring(0, begin).trim();
+		String dataName = _foreach.substring(begin + _in.length()).trim();
+		fetcher = new Fetcher(new Name(dataName, setting.getSetting("claw.identifier")), contextHolder);
+		
+		for (Statement statement : getChildren()) {
+			statement.compile(setting);
+		}
+	}
+	
+	@Override
 	public void execute(AmabSetting setting, AmabContext context, AmabResult result) {
 		AmabContext subContext = context.newSubContext();
+		contextHolder.setAmabContext(subContext);
 		List<Object> datas = getDatas();
 		for (Object value : datas) {
-			new Pusher(name, value, subContext).push();
+			new Pusher(iterName, value, contextHolder).push();
 			for (Statement statement : getChildren()) {
 				statement.execute(setting, subContext, result);
 			}
+			subContext.clearVars();
 		}
 	}
 	
@@ -66,8 +88,8 @@ public class Foreach extends Control {
 		return fetcher;
 	}
 	
-	public String getName() {
-		return name;
+	public String getIterName() {
+		return iterName;
 	}
 	
 }

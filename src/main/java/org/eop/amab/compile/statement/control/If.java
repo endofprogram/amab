@@ -6,9 +6,12 @@ import java.util.List;
 import org.eop.amab.AmabContext;
 import org.eop.amab.AmabResult;
 import org.eop.amab.AmabSetting;
+import org.eop.amab.compile.AmabContextHolder;
 import org.eop.amab.compile.Condition;
+import org.eop.amab.compile.Name;
 import org.eop.amab.compile.Statement;
 import org.eop.amab.compile.statement.Control;
+import org.eop.amab.context.Fetcher;
 import org.eop.amab.split.Section;
 
 /**
@@ -18,17 +21,40 @@ import org.eop.amab.split.Section;
 public class If extends Control {
 
 	private Condition condition;
+	private AmabContextHolder contextHolder;
 	private List<Elif> _elifs = new ArrayList<>();
 	private Else _else;
 	private End _end;
 	
 	public If(Section section) {
 		super(section);
+		contextHolder = new AmabContextHolder();
+	}
+	
+	@Override
+	public void compile(AmabSetting setting) {
+		int begin = getSection().getSource().indexOf("(") + 1;
+		int end = getSection().getSource().lastIndexOf(")");
+		String dataName = getSection().getSource().substring(begin, end).trim();
+		condition = new Condition(new Fetcher(new Name(dataName, setting.getSetting("claw.identifier")), contextHolder));
+		
+		for (Statement statement : getChildren()) {
+			statement.compile(setting);
+		}
+		if (hasElif()) {
+			for (Elif elif : getElifs()) {
+				elif.compile(setting);
+			}
+		}
+		if (hasElse()) {
+			getElse().compile(setting);
+		}
 	}
 	
 	@Override
 	public void execute(AmabSetting setting, AmabContext context, AmabResult result) {
 		AmabContext subContext = context.newSubContext();
+		contextHolder.setAmabContext(subContext);
 		if (condition()) {
 			executeIf(setting, subContext, result);
 		} else if (hasElif()) {

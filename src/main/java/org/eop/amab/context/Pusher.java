@@ -1,6 +1,6 @@
 package org.eop.amab.context;
 
-import org.eop.amab.AmabContext;
+import org.eop.amab.compile.AmabContextHolder;
 
 /**
  * @author lixinjie
@@ -10,16 +10,16 @@ public class Pusher {
 
 	private String name;
 	private Object value;
-	private AmabContext context;
+	private AmabContextHolder contextHolder;
 	
-	public Pusher(String name, Object value, AmabContext context) {
+	public Pusher(String name, Object value, AmabContextHolder contextHolder) {
 		this.name = name;
 		this.value = value;
-		this.context = context;
+		this.contextHolder = contextHolder;
 	}
 	
 	public void push() {
-		
+		contextHolder.getAmabContext().addVar(name, value);
 	}
 	
 	public String getName() {
@@ -30,7 +30,7 @@ public class Pusher {
 		return value;
 	}
 	
-	public AmabContext getAmabContext() {
-		return context;
+	public AmabContextHolder getAmabContextHolder() {
+		return contextHolder;
 	}
 }

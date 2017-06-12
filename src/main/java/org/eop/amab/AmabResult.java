@@ -6,4 +6,17 @@ package org.eop.amab;
  */
 public class AmabResult {
 
+	private StringBuilder buffer;
+	
+	public AmabResult() {
+		buffer = new StringBuilder();
+	}
+	
+	public void write(Object output) {
+		buffer.append(output);
+	}
+	
+	public String getOutput() {
+		return buffer.toString();
+	}
 }

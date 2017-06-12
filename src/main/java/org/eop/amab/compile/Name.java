@@ -7,35 +7,35 @@ package org.eop.amab.compile;
 public class Name {
 
 	private String name;
-	private String delimiter;
+	private String identifier;
 	
-	public Name(String name, String delimiter) {
+	public Name(String name, String identifier) {
 		this.name = name;
-		this.delimiter = delimiter;
+		this.identifier = identifier;
 	}
 	
 	public String getName() {
 		return name;
 	}
 	
-	public String getDelimiter() {
-		return delimiter;
+	public String getIdentifier() {
+		return identifier;
 	}
 	
 	public boolean needClaw() {
-		return name.contains(delimiter);
+		return name.contains(identifier);
 	}
 	
 	public String getPrefix() {
 		if (needClaw()) {
-			return name.substring(0, name.indexOf(delimiter));
+			return name.substring(0, name.indexOf(identifier));
 		}
 		return name;
 	}
 	
 	public String getPath() {
 		if (needClaw()) {
-			return name.substring(name.indexOf(delimiter) + 1);
+			return name.substring(name.indexOf(identifier) + 1);
 		}
 		return null;
 	}

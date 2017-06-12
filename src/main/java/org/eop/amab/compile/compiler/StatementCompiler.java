@@ -24,8 +24,6 @@ import org.eop.amab.compile.statement.control.Else;
 import org.eop.amab.compile.statement.control.End;
 import org.eop.amab.compile.statement.control.Foreach;
 import org.eop.amab.compile.statement.control.If;
-import org.eop.amab.compile.statement.output.ClawOutput;
-import org.eop.amab.compile.statement.output.DirectOutput;
 import org.eop.amab.split.Section;
 
 /**
@@ -38,8 +36,6 @@ public class StatementCompiler {
 		switch (getStatementType(statementReader)) {
 			case If : return compileIf(statementReader);
 			case Foreach : return compileForeach(statementReader);
-			case ClawOutput : return compileClawOutput(statementReader);
-			case DirectOutput : return compileDirectOutput(statementReader);
 			case Other : return compileOther(statementReader);
 			default : return null;
 		}
@@ -87,16 +83,6 @@ public class StatementCompiler {
 		return _foreach;
 	}
 	
-	protected static ClawOutput compileClawOutput(StatementReader statementReader) {
-		ClawOutput _claw = new ClawOutput(statementReader.read().getSection());
-		return _claw;
-	}
-	
-	protected static DirectOutput compileDirectOutput(StatementReader statementReader) {
-		DirectOutput _direct = new DirectOutput(statementReader.read().getSection());
-		return _direct;
-	}
-	
 	protected static Statement compileOther(StatementReader statementReader) {
 		Statement _other = statementReader.read();
 		return _other;
@@ -127,12 +113,10 @@ public class StatementCompiler {
 	
 	protected static Statement[] compileNonControlChildStatements(StatementReader statementReader) {
 		List<Statement> statements = new ArrayList<>();
-		Set<StatementType> statementTypes = EnumSet.of(StatementType.Other, StatementType.ClawOutput, StatementType.DirectOutput);
+		Set<StatementType> statementTypes = EnumSet.of(StatementType.Other);
 		StatementType statementType = StatementType.tryOf(statementReader.look());
 		while (statementTypes.contains(statementType)) {
 			switch (statementType) {
-				case ClawOutput : statements.add(compileClawOutput(statementReader)); break;
-				case DirectOutput : statements.add(compileDirectOutput(statementReader)); break;
 				case Other : statements.add(compileOther(statementReader)); break;
 				default : break;
 			}

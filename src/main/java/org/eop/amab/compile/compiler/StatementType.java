@@ -2,7 +2,6 @@ package org.eop.amab.compile.compiler;
 
 import org.eop.amab.compile.Statement;
 import org.eop.amab.compile.statement.Control;
-import org.eop.amab.compile.statement.Output;
 
 /**
  * @author lixinjie
@@ -18,9 +17,6 @@ public enum StatementType {
 	
 	End,
 	
-	DirectOutput,
-	ClawOutput,
-
 	Other,
 	
 	Unknown,
@@ -48,12 +44,6 @@ public enum StatementType {
 				return End;
 			}
 			return Unknown;
-		}
-		if (statement instanceof Output) {
-			if (statement.getSection().getSource().contains(":")) {
-				return ClawOutput;
-			}
-			return DirectOutput;
 		}
 		return Other;
 	}

@@ -18,6 +18,13 @@ public class Else extends Control {
 	}
 
 	@Override
+	public void compile(AmabSetting setting) {
+		for (Statement statement : getChildren()) {
+			statement.compile(setting);
+		}
+	}
+	
+	@Override
 	public void execute(AmabSetting setting, AmabContext context, AmabResult result) {
 		AmabContext subContext = context.newSubContext();
 		for (Statement statement : getChildren()) {

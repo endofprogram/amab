@@ -3,6 +3,9 @@ package org.eop.amab.compile.statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eop.amab.AmabContext;
+import org.eop.amab.AmabResult;
+import org.eop.amab.AmabSetting;
 import org.eop.amab.compile.Statement;
 import org.eop.amab.split.Section;
 
@@ -24,5 +27,15 @@ public class Control extends Statement {
 	
 	public List<Statement> getChildren() {
 		return children;
+	}
+
+	@Override
+	public void compile(AmabSetting setting) {
+		
+	}
+
+	@Override
+	public void execute(AmabSetting setting, AmabContext context, AmabResult result) {
+		
 	}
 }

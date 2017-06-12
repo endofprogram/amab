@@ -9,7 +9,7 @@ import org.eop.amab.split.Section;
  * @author lixinjie
  * @since 2017-05-07
  */
-public class Statement {
+public abstract class Statement {
 
 	private Section section;
 	
@@ -17,13 +17,9 @@ public class Statement {
 		this.section = section;
 	}
 	
-	public void compile(AmabSetting setting, AmabContext context) {
-		
-	}
+	public abstract void compile(AmabSetting setting);
 	
-	public void execute(AmabSetting setting, AmabContext context, AmabResult result) {
-		
-	}
+	public abstract void execute(AmabSetting setting, AmabContext context, AmabResult result);
 
 	public Section getSection() {
 		return section;
