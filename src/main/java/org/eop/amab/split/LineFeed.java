@@ -12,4 +12,19 @@ public class LineFeed extends Section {
 		super(source, location);
 	}
 
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + "[" + getCrLfString() + "], Location" + getLocation();
+	}
+	
+	protected String getCrLfString() {
+		if ("\r\n".equals(getSource())) {
+			return "\\r\\n";
+		} else if ("\r".equals(getSource())) {
+			return "\\r";
+		} else if ("\n".equals(getSource())) {
+			return "\\n";
+		}
+		return "";
+	}
 }

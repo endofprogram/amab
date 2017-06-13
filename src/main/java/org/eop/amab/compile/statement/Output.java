@@ -36,4 +36,15 @@ public class Output extends Statement {
 		result.write(fetcher.fetch());
 	}
 
+	@Override
+	public String toString() {
+		return "Output[" + getSection().getSource() + "]";
+	}
+	
+	@Override
+	public void display(StringBuilder sb, int indent) {
+		displayIndent(sb, indent);
+		sb.append(toString());
+		displayCrLf(sb, indent);
+	}
 }

@@ -100,4 +100,18 @@ public class Foreach extends Control {
 	public End getEnd() {
 		return _end;
 	}
+	
+	@Override
+	public String toString() {
+		return "Foreach[" + getSection().getSource() + "]";
+	}
+	
+	@Override
+	public void display(StringBuilder sb, int indent) {
+		displayIndent(sb, indent);
+		sb.append(toString());
+		displayCrLf(sb, indent);
+		displayChildren(sb, indent + 1);
+		getEnd().display(sb, indent);
+	}
 }

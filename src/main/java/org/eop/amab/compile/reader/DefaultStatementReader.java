@@ -60,4 +60,9 @@ public class DefaultStatementReader implements StatementReader {
 	public boolean isEnd() {
 		return index >= length;
 	}
+	
+	@Override
+	public String display() {
+		return "StatementReader[length:" + length + ", index:" + index + ", current:" + lookBack() + ", content:" + statements + "]";
+	}
 }

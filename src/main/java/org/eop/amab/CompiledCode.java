@@ -24,4 +24,12 @@ public class CompiledCode {
 	public void addStatement(Statement statement) {
 		statements.add(statement);
 	}
+	
+	public String display() {
+		StringBuilder sb = new StringBuilder(1024);
+		for (Statement statement : statements) {
+			statement.display(sb, 0);
+		}
+		return sb.toString();
+	}
 }

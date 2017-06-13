@@ -38,4 +38,20 @@ public class Control extends Statement {
 	public void execute(AmabSetting setting, AmabContext context, AmabResult result) {
 		
 	}
+	
+	@Override
+	public String toString() {
+		return "Control[" + getSection().getSource() + "]";
+	}
+	
+	@Override
+	public void display(StringBuilder sb, int indent) {
+		
+	}
+	
+	protected void displayChildren(StringBuilder sb, int indent) {
+		for (Statement child : children) {
+			child.display(sb, indent);
+		}
+	}
 }

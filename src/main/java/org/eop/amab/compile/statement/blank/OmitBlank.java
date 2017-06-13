@@ -21,4 +21,15 @@ public class OmitBlank extends PositionBlank {
 		
 	}
 
+	@Override
+	public String toString() {
+		return "OmitBlank[" + getSection().getSource() + "]";
+	}
+	
+	@Override
+	public void display(StringBuilder sb, int indent) {
+		displayIndent(sb, indent);
+		sb.append(toString());
+		displayCrLf(sb, indent);
+	}
 }

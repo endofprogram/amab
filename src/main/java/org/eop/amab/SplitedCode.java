@@ -24,4 +24,16 @@ public class SplitedCode {
 	public void addSection(Section section) {
 		sections.add(section);
 	}
+	
+	public String display() {
+		StringBuilder sb = new StringBuilder();
+		for (Section section : sections) {
+			sb.append(section).append(getCrLf());
+		}
+		return sb.toString();
+	}
+	
+	protected String getCrLf() {
+		return System.getProperty("line.separator");
+	}
 }

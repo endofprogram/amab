@@ -26,4 +26,15 @@ public class Constant extends Statement {
 		result.write(getSection().getSource());
 	}
 
+	@Override
+	public String toString() {
+		return "Constant[" + getSection().getSource() + "]";
+	}
+	
+	@Override
+	public void display(StringBuilder sb, int indent) {
+		displayIndent(sb, indent);
+		sb.append(toString());
+		displayCrLf(sb, indent);
+	}
 }

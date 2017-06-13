@@ -27,4 +27,6 @@ public interface SectionReader {
 	Section lookBack();
 	
 	boolean isEnd();
+	
+	String display();
 }

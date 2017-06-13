@@ -128,4 +128,9 @@ public class DefaultSectionReader implements SectionReader {
 	public boolean isEnd() {
 		return index >= length;
 	}
+	
+	@Override
+	public String display() {
+		return "SectionReader[length:" + length + ", index:" + index + ", current:" + lookBack() + ", content:" + sections + "]";
+	}
 }

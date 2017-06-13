@@ -118,4 +118,26 @@ public class If extends Control {
 	public End getEnd() {
 		return _end;
 	}
+	
+	@Override
+	public String toString() {
+		return "If[" + getSection().getSource() + "]";
+	}
+	
+	@Override
+	public void display(StringBuilder sb, int indent) {
+		displayIndent(sb, indent);
+		sb.append(toString());
+		displayCrLf(sb, indent);
+		displayChildren(sb, indent + 1);
+		if (hasElif()) {
+			for (Elif elif : getElifs()) {
+				elif.display(sb, indent);
+			}
+		}
+		if (hasElse()) {
+			getElse().display(sb, indent);
+		}
+		getEnd().display(sb, indent);
+	}
 }

@@ -23,4 +23,15 @@ public class HeadBlank extends PositionBlank {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "HeadBlank[" + getSection().getSource() + "]";
+	}
+	
+	@Override
+	public void display(StringBuilder sb, int indent) {
+		displayIndent(sb, indent);
+		sb.append(toString());
+		displayCrLf(sb, indent);
+	}
 }

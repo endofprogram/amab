@@ -21,4 +21,15 @@ public class RetainBlank extends PositionBlank {
 		result.write(getSection().getSource());
 	}
 
+	@Override
+	public String toString() {
+		return "RetainBlank[" + getSection().getSource() + "]";
+	}
+	
+	@Override
+	public void display(StringBuilder sb, int indent) {
+		displayIndent(sb, indent);
+		sb.append(toString());
+		displayCrLf(sb, indent);
+	}
 }

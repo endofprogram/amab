@@ -17,4 +17,6 @@ public interface StatementReader {
 	Statement lookBack();
 	
 	boolean isEnd();
+	
+	String display();
 }

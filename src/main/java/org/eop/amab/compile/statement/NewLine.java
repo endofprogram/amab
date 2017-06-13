@@ -28,4 +28,26 @@ public class NewLine extends Statement {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "NewLine[" + getCrLfString() + "]";
+	}
+	
+	protected String getCrLfString() {
+		if ("\r\n".equals(getSection().getSource())) {
+			return "\\r\\n";
+		} else if ("\r".equals(getSection().getSource())) {
+			return "\\r";
+		} else if ("\n".equals(getSection().getSource())) {
+			return "\\n";
+		}
+		return "";
+	}
+	
+	@Override
+	public void display(StringBuilder sb, int indent) {
+		displayIndent(sb, indent);
+		sb.append(toString());
+		displayCrLf(sb, indent);
+	}
 }

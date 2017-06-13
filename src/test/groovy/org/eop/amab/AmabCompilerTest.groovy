@@ -7,12 +7,14 @@ import org.junit.Test
  * @author lixinjie
  * @since 2017-05-06
  */
-class AmabSpliterTest extends AbstractCommonTest {
+class AmabCompilerTest extends AbstractCommonTest {
 
 	@Test
 	void test1() {
 		SplitedCode splitedCode = AmabSpliter.split(new SourceCode(getSource()))
-		println splitedCode.display()
+		AmabSetting setting = new AmabSetting()
+		CompiledCode compiledCode = AmabCompiler.compile(splitedCode, setting)
+		println compiledCode.display()
 	}
 	
 	String getSource() {

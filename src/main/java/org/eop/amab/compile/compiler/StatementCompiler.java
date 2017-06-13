@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.eop.amab.AmabSetting;
 import org.eop.amab.compile.Statement;
+import org.eop.amab.compile.exception.CompileException;
 import org.eop.amab.compile.reader.SectionReader;
 import org.eop.amab.compile.reader.StatementReader;
 import org.eop.amab.compile.statement.Comment;
@@ -54,7 +55,7 @@ public class StatementCompiler {
 	
 	protected static void checkReachEnd(StatementReader statementReader) {
 		if (!statementReader.isEnd()) {
-			
+			throw new CompileException("the reader should reach the end, but now not, see reader info " + statementReader.display());
 		}
 	}
 	
@@ -188,7 +189,7 @@ public class StatementCompiler {
 		if (_end != null) {
 			addEnd(control, _end);
 		} else {
-			
+			throw new CompileException("the current item of reader should be a end, but now not, see reader info " + statementReader.display());
 		}
 	}
 	
@@ -214,7 +215,7 @@ public class StatementCompiler {
 	
 	protected static void checkReachEnd(SectionReader sectionReader) {
 		if (!sectionReader.isEnd()) {
-			
+			throw new CompileException("the reader should reach the end, but now not, see reader info " + sectionReader.display());
 		}
 	}
 	
@@ -233,7 +234,7 @@ public class StatementCompiler {
 		}
 	}
 	protected static void checkBlankType(SectionReader sectionReader) {
-		
+		throw new CompileException("the current item of reader should be a blank, but now not, see reader info " + sectionReader.display());
 	}
 	
 	protected static BlankType getBlankType(SectionReader sectionReader) {
