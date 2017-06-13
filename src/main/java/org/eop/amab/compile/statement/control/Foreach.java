@@ -26,6 +26,7 @@ public class Foreach extends Control {
 	private String iterName;
 	private Fetcher fetcher;
 	private AmabContextHolder contextHolder;
+	private End _end;
 	
 	public Foreach(Section section) {
 		super(section);
@@ -92,4 +93,11 @@ public class Foreach extends Control {
 		return iterName;
 	}
 	
+	public void setEnd(End _end) {
+		this._end = _end;
+	}
+	
+	public End getEnd() {
+		return _end;
+	}
 }

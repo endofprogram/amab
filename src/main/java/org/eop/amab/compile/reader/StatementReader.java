@@ -13,4 +13,8 @@ public interface StatementReader {
 	int unread();
 	
 	Statement look();
+	
+	Statement lookBack();
+	
+	boolean isEnd();
 }

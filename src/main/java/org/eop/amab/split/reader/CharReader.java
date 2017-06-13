@@ -27,4 +27,6 @@ public interface CharReader {
 	void increaseLine();
 	
 	Position getPosition();
+	
+	boolean isEnd();
 }

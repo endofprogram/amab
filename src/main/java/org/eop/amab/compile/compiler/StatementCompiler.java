@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eop.amab.AmabSetting;
 import org.eop.amab.compile.Statement;
 import org.eop.amab.compile.reader.SectionReader;
 import org.eop.amab.compile.reader.StatementReader;
@@ -32,12 +33,28 @@ import org.eop.amab.split.Section;
  */
 public class StatementCompiler {
 
-	public static Statement compileEntireStatement(StatementReader statementReader) {
+	public static Statement compileEntireStatement(StatementReader statementReader, AmabSetting setting) {
+		Statement statement = statementReader.read();
+		if (statement != null) {
+			statement.compile(setting);
+			return statement;
+		}
+		checkReachEnd(statementReader);
+		return null;
+	}
+	
+	public static Statement compileCompositeStatement(StatementReader statementReader) {
 		switch (getStatementType(statementReader)) {
 			case If : return compileIf(statementReader);
 			case Foreach : return compileForeach(statementReader);
 			case Other : return compileOther(statementReader);
-			default : return null;
+			default : checkReachEnd(statementReader); return null;
+		}
+	}
+	
+	protected static void checkReachEnd(StatementReader statementReader) {
+		if (!statementReader.isEnd()) {
+			
 		}
 	}
 	
@@ -139,7 +156,7 @@ public class StatementCompiler {
 	}
 	
 	protected static void addElif(If _if, Elif _elif) {
-		
+		_if.addElif(_elif);
 	}
 	
 	protected static void addElse(If _if, StatementReader statementReader) {
@@ -151,17 +168,7 @@ public class StatementCompiler {
 	}
 	
 	protected static void addElse(If _if, Else _else) {
-		
-	}
-	
-	protected static void addToIf(If _if, Control control) {
-		if (control != null) {
-			if (control instanceof Elif) {
-				
-			} else if (control instanceof Else) {
-				
-			}
-		}
+		_if.setElse(_else);
 	}
 	
 	protected static void addToControl(Control control, Statement[] statements) {
@@ -173,20 +180,24 @@ public class StatementCompiler {
 	}
 	
 	protected static void addToControl(Control control, Statement statement) {
-		
+		control.addChild(statement);
 	}
 	
 	protected static void addEnd(Control control, StatementReader statementReader) {
 		End _end = compileEnd(statementReader);
 		if (_end != null) {
-			addEnd(control);
+			addEnd(control, _end);
 		} else {
 			
 		}
 	}
 	
-	protected static void addEnd(Control control) {
-		
+	protected static void addEnd(Control control, End _end) {
+		if (control instanceof If) {
+			((If)control).setEnd(_end);
+		} else if (control instanceof Foreach) {
+			((Foreach)control).setEnd(_end);
+		}
 	}
 	
 	public static Statement compileSingleStatement(SectionReader sectionReader) {
@@ -197,7 +208,13 @@ public class StatementCompiler {
 			case Constant : return compileConstant(sectionReader);
 			case Output : return compileOutput(sectionReader);
 			case Control : return compileControl(sectionReader);
-			default : return null;
+			default : checkReachEnd(sectionReader); return null;
+		}
+	}
+	
+	protected static void checkReachEnd(SectionReader sectionReader) {
+		if (!sectionReader.isEnd()) {
+			
 		}
 	}
 	
@@ -212,8 +229,11 @@ public class StatementCompiler {
 			case TailBlank : return compileTailBlank(sectionReader);
 			case OmitBlank : return compileOmitBlank(sectionReader);
 			case RetainBlank : return compileRetainBlank(sectionReader);
-			default : return null;
+			default : checkBlankType(sectionReader); return null;
 		}
+	}
+	protected static void checkBlankType(SectionReader sectionReader) {
+		
 	}
 	
 	protected static BlankType getBlankType(SectionReader sectionReader) {

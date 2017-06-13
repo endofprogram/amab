@@ -1,6 +1,8 @@
 package org.eop.amab.split.reader.chars;
 
 import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.Set;
 
 /**
  * @author lixinjie
@@ -8,27 +10,25 @@ import java.util.Arrays;
  */
 public class CharsMatcher {
 
-	private SpecChar[] specChars;
+	private Set<SpecChar> specCharSet;
 	private SpecChar matchedSpecChar;
 	
 	private CharsMatcher(SpecChar[] specChars) {
-		this.specChars = specChars;
+		this.specCharSet = EnumSet.copyOf(Arrays.asList(specChars));
 		this.matchedSpecChar = SpecChar.None;
 	}
 	
 	public boolean match(char _char) {
-		for (SpecChar specChar : specChars) {
-			if (specChar.match(_char)) {
-				matchedSpecChar = specChar;
-				return true;
-			}
-		}
-		matchedSpecChar = SpecChar.None;
-		return false;
+		return match(SpecChar.fromChar(_char));
 	}
 	
 	public boolean match(SpecChar specChar) {
-		return match(specChar.toChar());
+		if (specCharSet.contains(specChar)) {
+			matchedSpecChar = specChar;
+			return true;
+		}
+		matchedSpecChar = SpecChar.None;
+		return false;
 	}
 	
 	public SpecChar getMatchedSpecChar() {
@@ -36,10 +36,7 @@ public class CharsMatcher {
 	}
 	
 	public void addSpecChar(SpecChar specChar) {
-		if (Arrays.binarySearch(specChars, specChar) < 0) {
-			specChars = Arrays.copyOf(specChars, specChars.length + 1);
-			specChars[specChars.length - 1] = specChar;
-		}
+		specCharSet.add(specChar);
 	}
 	
 	public static CharsMatcher fromSpecChar(SpecChar... specChars) {

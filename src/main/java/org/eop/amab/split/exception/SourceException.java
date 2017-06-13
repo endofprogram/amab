@@ -11,6 +11,18 @@ public class SourceException extends AmabException {
 
 	private static final long serialVersionUID = -7479081295311123531L;
 
+	public SourceException(String message) {
+        super(message);
+    }
+	
+	public SourceException(Throwable cause) {
+        super(cause);
+    }
+	
+	public SourceException(String message, Throwable cause) {
+        super(message, cause);
+    }
+	
 	public SourceException(String message, Location location) {
 		super(message, location);
 	}

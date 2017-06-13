@@ -23,4 +23,8 @@ public interface SectionReader {
 	Section lookPrev();
 	
 	Section[] lookPrev(int count);
+	
+	Section lookBack();
+	
+	boolean isEnd();
 }

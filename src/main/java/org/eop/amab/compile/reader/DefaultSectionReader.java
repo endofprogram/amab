@@ -116,4 +116,16 @@ public class DefaultSectionReader implements SectionReader {
 		return new Section[0];
 	}
 
+	@Override
+	public Section lookBack() {
+		if (index > 0) {
+			return sections.get(index - 1);
+		}
+		return null;
+	}
+	
+	@Override
+	public boolean isEnd() {
+		return index >= length;
+	}
 }

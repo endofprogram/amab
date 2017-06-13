@@ -13,15 +13,21 @@ import org.eop.amab.compile.reader.StatementReader;
  */
 public class AmabCompiler {
 
-	public static CompiledCode compile(SplitedCode splited) {
+	public static CompiledCode compile(SplitedCode splited, AmabSetting setting) {
 		SectionReader sectionReader = new DefaultSectionReader(splited.getSections());
 		Statement statement;
 		CompiledCode compiledCode = new CompiledCode();
 		while ((statement = StatementCompiler.compileSingleStatement(sectionReader)) != null) {
 			compiledCode.addStatement(statement);
 		}
-		StatementReader statementReader = new DefaultStatementReader();
-		while ((statement = StatementCompiler.compileEntireStatement(statementReader)) != null) {
+		StatementReader statementReader = new DefaultStatementReader(compiledCode.getStatements());
+		compiledCode = new CompiledCode();
+		while ((statement = StatementCompiler.compileCompositeStatement(statementReader)) != null) {
+			compiledCode.addStatement(statement);
+		}
+		statementReader = new DefaultStatementReader(compiledCode.getStatements());
+		compiledCode = new CompiledCode();
+		while ((statement = StatementCompiler.compileEntireStatement(statementReader, setting)) != null) {
 			compiledCode.addStatement(statement);
 		}
 		return compiledCode;

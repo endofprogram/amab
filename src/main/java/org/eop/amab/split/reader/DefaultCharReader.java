@@ -136,4 +136,8 @@ public class DefaultCharReader implements CharReader {
 		return new Position(line + 1, column + 1);
 	}
 
+	@Override
+	public boolean isEnd() {
+		return index >= length;
+	}
 }

@@ -10,8 +10,20 @@ public class AmabException extends RuntimeException {
 
 	private static final long serialVersionUID = 8248269297430112342L;
 	
+	public AmabException(String message) {
+        super(message);
+    }
+	
+	public AmabException(Throwable cause) {
+        super(cause);
+    }
+	
+	public AmabException(String message, Throwable cause) {
+        super(message, cause);
+    }
+	
 	public AmabException(String message, Location location) {
-		super(addLocationInfo(message, location));
+		this(addLocationInfo(message, location));
 	}
 	
 	protected static String addLocationInfo(String message, Location location) {
