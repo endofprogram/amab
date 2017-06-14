@@ -36,6 +36,7 @@ public class If extends Control {
 		int begin = getSection().getSource().indexOf("(") + 1;
 		int end = getSection().getSource().lastIndexOf(")");
 		String dataName = getSection().getSource().substring(begin, end).trim();
+		contextHolder = new AmabContextHolder();
 		condition = new Condition(new Fetcher(new Name(dataName, setting.getSetting("claw.identifier")), contextHolder));
 		
 		for (Statement statement : getChildren()) {

@@ -12,8 +12,12 @@ public class AmabContext {
 	private Map<String, Object> container;
 	private AmabContext parent;
 	
-	public AmabContext(AmabContext parent) {
+	public AmabContext() {
 		container = new HashMap<>();
+	}
+	
+	public AmabContext(AmabContext parent) {
+		this();
 		this.parent = parent;
 	}
 	
@@ -32,7 +36,10 @@ public class AmabContext {
 		if (container.containsKey(name)) {
 			return true;
 		}
-		return parent.containsVar(name);
+		if (parent != null) {
+			return parent.containsVar(name);
+		}
+		return false;
 	}
 	
 	public void clearVars() {

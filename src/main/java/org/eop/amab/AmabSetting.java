@@ -34,7 +34,7 @@ public class AmabSetting {
 	}
 	
 	protected void initDefaultSetting() {
-		
+		addSetting("claw.identifier", ":");
 	}
 	
 	protected void initSetting(Map<String, String> settings) {

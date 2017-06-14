@@ -2,6 +2,7 @@ package org.eop.amab.context;
 
 import org.eop.amab.compile.AmabContextHolder;
 import org.eop.amab.compile.Name;
+import org.eop.amab.execute.exception.ExecuteException;
 import org.eop.claw.Claw;
 import org.eop.claw.IClaw;
 import org.eop.claw.IResult;
@@ -14,6 +15,7 @@ public class Fetcher {
 
 	private Name name;
 	private AmabContextHolder contextHolder;
+	private ExecuteException exception;
 	
 	public Fetcher(Name name, AmabContextHolder contextHolder) {
 		this.name = name;
@@ -22,6 +24,7 @@ public class Fetcher {
 	
 	public Object fetch() {
 		if (contextHolder.getAmabContext().containsVar(name.getName())) {
+			clearException();
 			return contextHolder.getAmabContext().getVar(name.getName());
 		}
 		if (contextHolder.getAmabContext().containsVar(name.getPrefix())) {
@@ -29,11 +32,18 @@ public class Fetcher {
 			if (name.needClaw()) {
 				IClaw claw = new Claw(var);
 				IResult result = claw.getResult(name.getPath());
-				contextHolder.getAmabContext().addVar(name.getName(), result.getValue());
-				return contextHolder.getAmabContext().getVar(name.getName());
+				if (result.isFound()) {
+					contextHolder.getAmabContext().addVar(name.getName(), result.getValue());
+					clearException();
+					return contextHolder.getAmabContext().getVar(name.getName());
+				}
+				setException(result.getException());
+				return null;
 			}
+			clearException();
 			return var;
 		}
+		setException(null);
 		return null;
 	}
 	
@@ -43,5 +53,21 @@ public class Fetcher {
 	
 	public AmabContextHolder getAmabContextHolder() {
 		return contextHolder;
+	}
+	
+	public ExecuteException getException() {
+		return exception;
+	}
+	
+	protected void clearException() {
+		exception = null;
+	}
+	
+	protected void setException(Exception cause) {
+		if (cause != null) {
+			exception = new ExecuteException("the value not found from context with name '" + name.getName() + "'", cause);
+		} else {
+			exception = new ExecuteException("the value not found from context with name '" + name.getName() + "'");
+		}
 	}
 }

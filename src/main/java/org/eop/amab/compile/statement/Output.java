@@ -27,13 +27,19 @@ public class Output extends Statement {
 		int begin = getSection().getSource().indexOf("{") + 1;
 		int end = getSection().getSource().lastIndexOf("}");
 		String dataName = getSection().getSource().substring(begin, end).trim();
+		contextHolder = new AmabContextHolder();
 		fetcher = new Fetcher(new Name(dataName, setting.getSetting("claw.identifier")), contextHolder);
 	}
 
 	@Override
 	public void execute(AmabSetting setting, AmabContext context, AmabResult result) {
 		contextHolder.setAmabContext(context);
-		result.write(fetcher.fetch());
+		Object value = fetcher.fetch();
+		if (value != null) {
+			result.write(value);
+		} else {
+			throw fetcher.getException();
+		}
 	}
 
 	@Override

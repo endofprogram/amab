@@ -15,6 +15,7 @@ import org.eop.amab.compile.Statement;
 import org.eop.amab.compile.statement.Control;
 import org.eop.amab.context.Fetcher;
 import org.eop.amab.context.Pusher;
+import org.eop.amab.execute.exception.ExecuteException;
 import org.eop.amab.split.Section;
 
 /**
@@ -42,6 +43,7 @@ public class Foreach extends Control {
 		begin = _foreach.indexOf(_in);
 		iterName = _foreach.substring(0, begin).trim();
 		String dataName = _foreach.substring(begin + _in.length()).trim();
+		contextHolder = new AmabContextHolder();
 		fetcher = new Fetcher(new Name(dataName, setting.getSetting("claw.identifier")), contextHolder);
 		
 		for (Statement statement : getChildren()) {
@@ -66,6 +68,9 @@ public class Foreach extends Control {
 	@SuppressWarnings("unchecked")
 	protected List<Object> getDatas() {
 		Object value = fetcher.fetch();
+		if (value == null) {
+			throw fetcher.getException();
+		}
 		if (value instanceof Object[]) {
 			return Arrays.asList((Object[])value);
 		}
@@ -82,7 +87,7 @@ public class Foreach extends Control {
 			}
 			return datas;
 		}
-		return null;
+		throw new ExecuteException("the value " + value + " with name '" + fetcher.getName().getName() + "' can not be used as a list");
 	}
 	
 	public Fetcher getFetcher() {
