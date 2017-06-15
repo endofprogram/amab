@@ -1,5 +1,14 @@
-package org.eop.amab
+package org.eop.amab.test
 
+import org.eop.amab.AmabCompiler
+import org.eop.amab.AmabContext
+import org.eop.amab.AmabExecutor
+import org.eop.amab.AmabResult
+import org.eop.amab.AmabSetting
+import org.eop.amab.AmabSpliter
+import org.eop.amab.CompiledCode
+import org.eop.amab.SourceCode
+import org.eop.amab.SplitedCode
 import org.eop.chassis.test.AbstractCommonTest
 import org.eop.jmx.builder.MapBuilder
 import org.junit.Test
@@ -14,7 +23,7 @@ class AmabExecutorTest extends AbstractCommonTest {
 	void test1() {
 		SplitedCode splitedCode = AmabSpliter.split(new SourceCode(getSource()))
 		AmabSetting setting = new AmabSetting()
-		setting.addSetting('output.format', '')
+		setting.addSetting('output.format', 'true')
 		CompiledCode compiledCode = AmabCompiler.compile(splitedCode, setting)
 		AmabContext context = new AmabContext()
 		MapBuilder mb = new MapBuilder()

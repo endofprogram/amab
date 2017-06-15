@@ -19,6 +19,7 @@ public class Elif extends Control {
 
 	private Condition condition;
 	private AmabContextHolder contextHolder;
+	private boolean executed;
 	
 	public Elif(Section section) {
 		super(section);
@@ -42,8 +43,13 @@ public class Elif extends Control {
 	public void execute(AmabSetting setting, AmabContext context, AmabResult result) {
 		AmabContext subContext = context.newSubContext();
 		contextHolder.setAmabContext(subContext);
-		for (Statement statement : getChildren()) {
-			statement.execute(setting, subContext, result);
+		if (condition()) {
+			for (Statement statement : getChildren()) {
+				statement.execute(setting, subContext, result);
+			}
+			executed = true;
+		} else {
+			executed = false;
 		}
 	}
 	
@@ -62,5 +68,9 @@ public class Elif extends Control {
 		sb.append(toString());
 		displayCrLf(sb, indent);
 		displayChildren(sb, indent + 1);
+	}
+	
+	public boolean isExecuted() {
+		return executed;
 	}
 }

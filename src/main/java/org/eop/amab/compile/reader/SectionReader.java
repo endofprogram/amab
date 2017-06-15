@@ -1,5 +1,7 @@
 package org.eop.amab.compile.reader;
 
+import java.util.List;
+
 import org.eop.amab.split.Section;
 
 /**
@@ -29,4 +31,10 @@ public interface SectionReader {
 	boolean isEnd();
 	
 	String display();
+	
+	int getIndex();
+	
+	List<Section> getSections();
+	
+	int getLength();
 }

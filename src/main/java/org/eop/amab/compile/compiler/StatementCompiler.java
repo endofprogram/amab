@@ -13,9 +13,9 @@ import org.eop.amab.compile.reader.StatementReader;
 import org.eop.amab.compile.statement.Comment;
 import org.eop.amab.compile.statement.Constant;
 import org.eop.amab.compile.statement.Control;
-import org.eop.amab.compile.statement.NewLine;
 import org.eop.amab.compile.statement.Output;
 import org.eop.amab.compile.statement.PositionBlank;
+import org.eop.amab.compile.statement.PositionNewLine;
 import org.eop.amab.compile.statement.blank.HeadBlank;
 import org.eop.amab.compile.statement.blank.MidBlank;
 import org.eop.amab.compile.statement.blank.OmitBlank;
@@ -26,6 +26,9 @@ import org.eop.amab.compile.statement.control.Else;
 import org.eop.amab.compile.statement.control.End;
 import org.eop.amab.compile.statement.control.Foreach;
 import org.eop.amab.compile.statement.control.If;
+import org.eop.amab.compile.statement.newline.OmitNewLine;
+import org.eop.amab.compile.statement.newline.OptionalNewLine;
+import org.eop.amab.split.LineFeed;
 import org.eop.amab.split.Section;
 
 /**
@@ -204,7 +207,7 @@ public class StatementCompiler {
 	public static Statement compileSingleStatement(SectionReader sectionReader) {
 		switch (getStatementCategory(sectionReader)) {
 			case PositionBlank : return compilePositionBlank(sectionReader);
-			case NewLine : return compileNewLine(sectionReader);
+			case PositionNewLine : return compilePositionNewLine(sectionReader);
 			case Comment : return compileComment(sectionReader);
 			case Constant : return compileConstant(sectionReader);
 			case Output : return compileOutput(sectionReader);
@@ -244,6 +247,18 @@ public class StatementCompiler {
 			blankType = BlankType.tryOf(sectionReader.lookPrev(), section, sectionReader.lookNext());
 		}
 		sectionReader.unread();
+		if (blankType == BlankType.HeadBlank) {
+			List<Section> sectionList = new ArrayList<>();
+			for (int i = sectionReader.getIndex() + 1; i < sectionReader.getLength(); i++) {
+				if (sectionReader.getSections().get(i) instanceof LineFeed) {
+					break;
+				}
+				sectionList.add(sectionReader.getSections().get(i));
+			}
+			Section[] sections = new Section[sectionList.size()];
+			sections = sectionList.toArray(sections);
+			return BlankType.tryOf(sections);
+		}
 		return blankType;
 	}
 	
@@ -267,8 +282,37 @@ public class StatementCompiler {
 		return new RetainBlank(sectionReader.read());
 	}
 	
-	protected static NewLine compileNewLine(SectionReader sectionReader) {
-		return new NewLine(sectionReader.read());
+	protected static PositionNewLine compilePositionNewLine(SectionReader sectionReader) {
+		switch (getNewLineType(sectionReader)) {
+			case OmitNewLine : return compileOmitNewLine(sectionReader);
+			case OptionalNewLine : return compileOptionalNewLine(sectionReader);
+			default : checkNewLineType(sectionReader); return null;
+		}
+	}
+	
+	protected static void checkNewLineType(SectionReader sectionReader) {
+		throw new CompileException("unable to determine the latest newline type, see reader info " + sectionReader.display());
+	}
+	
+	protected static NewLineType getNewLineType(SectionReader sectionReader) {
+		List<Section> sectionList = new ArrayList<>();
+		for (int i = sectionReader.getIndex() - 1; i >= 0; i--) {
+			if (sectionReader.getSections().get(i) instanceof LineFeed) {
+				break;
+			}
+			sectionList.add(sectionReader.getSections().get(i));
+		}
+		Section[] sections = new Section[sectionList.size()];
+		sections = sectionList.toArray(sections);
+		return NewLineType.tryOf(sections);
+	}
+	
+	protected static OmitNewLine compileOmitNewLine(SectionReader sectionReader) {
+		return new OmitNewLine(sectionReader.read());
+	}
+	
+	protected static OptionalNewLine compileOptionalNewLine(SectionReader sectionReader) {
+		return new OptionalNewLine(sectionReader.read());
 	}
 	
 	protected static Comment compileComment(SectionReader sectionReader) {

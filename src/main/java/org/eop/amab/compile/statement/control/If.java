@@ -58,10 +58,15 @@ public class If extends Control {
 		contextHolder.setAmabContext(subContext);
 		if (condition()) {
 			executeIf(setting, subContext, result);
-		} else if (hasElif()) {
-			executeElifs(setting, subContext, result);
-		} else if (hasElse()) {
-			executeElse(setting, subContext, result);
+		} else {
+			if (hasElif()) {
+				if (executeElifs(setting, subContext, result)) {
+					return;
+				}
+			}
+			if (hasElse()) {
+				executeElse(setting, subContext, result);
+			}
 		}
 	}
 	
@@ -71,13 +76,14 @@ public class If extends Control {
 		}
 	}
 	
-	protected void executeElifs(AmabSetting setting, AmabContext context, AmabResult result) {
+	protected boolean executeElifs(AmabSetting setting, AmabContext context, AmabResult result) {
 		for (Elif elif : getElifs()) {
-			if (elif.condition()) {
-				elif.execute(setting, context, result);
-				break;
+			elif.execute(setting, context, result);
+			if (elif.isExecuted()) {
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	protected void executeElse(AmabSetting setting, AmabContext context, AmabResult result) {

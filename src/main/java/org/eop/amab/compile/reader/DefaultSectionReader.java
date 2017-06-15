@@ -133,4 +133,19 @@ public class DefaultSectionReader implements SectionReader {
 	public String display() {
 		return "SectionReader[length:" + length + ", index:" + index + ", current:" + lookBack() + ", content:" + sections + "]";
 	}
+	
+	@Override
+	public int getIndex() {
+		return index;
+	}
+	
+	@Override
+	public List<Section> getSections() {
+		return sections;
+	}
+	
+	@Override
+	public int getLength() {
+		return length;
+	}
 }

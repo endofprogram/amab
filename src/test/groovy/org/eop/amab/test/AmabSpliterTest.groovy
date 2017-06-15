@@ -1,5 +1,8 @@
-package org.eop.amab
+package org.eop.amab.test
 
+import org.eop.amab.AmabSpliter
+import org.eop.amab.SourceCode
+import org.eop.amab.SplitedCode
 import org.eop.chassis.test.AbstractCommonTest
 import org.junit.Test
 

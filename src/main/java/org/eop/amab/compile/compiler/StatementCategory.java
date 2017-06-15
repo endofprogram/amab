@@ -16,7 +16,7 @@ public enum StatementCategory {
 
 	PositionBlank,
 	
-	NewLine,
+	PositionNewLine,
 	
 	Comment,
 	
@@ -36,7 +36,7 @@ public enum StatementCategory {
 			return PositionBlank;
 		}
 		if (section instanceof LineFeed) {
-			return NewLine;
+			return PositionNewLine;
 		}
 		if (section instanceof Remark) {
 			return Comment;

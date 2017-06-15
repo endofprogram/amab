@@ -66,4 +66,19 @@ public enum BlankType {
 		}
 		return None;
 	}
+	
+	public static BlankType tryOf(Section[] sections) {
+		if (sections == null) {
+			return None;
+		}
+		if (sections.length < 1) {
+			return OmitBlank;
+		}
+		for (Section section : sections) {
+			if (section instanceof PlainText || section instanceof PlaceHolder) {
+				return HeadBlank;
+			}
+		}
+		return OmitBlank;
+	}
 }

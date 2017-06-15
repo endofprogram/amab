@@ -1,7 +1,5 @@
 package org.eop.amab.compile.statement;
 
-import org.eop.amab.AmabContext;
-import org.eop.amab.AmabResult;
 import org.eop.amab.AmabSetting;
 import org.eop.amab.compile.Statement;
 import org.eop.amab.split.Section;
@@ -10,9 +8,9 @@ import org.eop.amab.split.Section;
  * @author lixinjie
  * @since 2017-05-07
  */
-public class NewLine extends Statement {
+public abstract class PositionNewLine extends Statement {
 
-	public NewLine(Section section) {
+	public PositionNewLine(Section section) {
 		super(section);
 	}
 
@@ -21,18 +19,6 @@ public class NewLine extends Statement {
 		
 	}
 
-	@Override
-	public void execute(AmabSetting setting, AmabContext context, AmabResult result) {
-		if ("true".equals(setting.getSetting("output.format"))) {
-			result.write(getSection().getSource());
-		}
-	}
-
-	@Override
-	public String toString() {
-		return "NewLine[" + getCrLfString() + "]";
-	}
-	
 	protected String getCrLfString() {
 		if ("\r\n".equals(getSection().getSource())) {
 			return "\\r\\n";
@@ -50,4 +36,5 @@ public class NewLine extends Statement {
 		sb.append(toString());
 		displayCrLf(sb, indent);
 	}
+	
 }
