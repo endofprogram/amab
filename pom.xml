@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.eop</groupId>
-  <artifactId>amab</artifactId>
+  <artifactId>eop-amab</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>amab</name>
+  <name>eop-amab</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -17,13 +17,13 @@
   <dependencies>
     <dependency>
       <groupId>org.eop</groupId>
-      <artifactId>claw</artifactId>
+      <artifactId>eop-claw</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
     
     <dependency>
       <groupId>org.eop</groupId>
-      <artifactId>jmx</artifactId>
+      <artifactId>eop-jmx</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
     
